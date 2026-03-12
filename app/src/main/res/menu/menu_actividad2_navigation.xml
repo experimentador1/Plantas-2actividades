@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_actividad1"
+        android:icon="@android:drawable/ic_media_previous"
+        android:title="@string/ir_a_actividad1" />
+</menu>
