@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:13.0.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
     implementation("androidx.fragment:fragment-ktx:1.8.2")
     implementation("com.google.android.material:material:1.12.0")

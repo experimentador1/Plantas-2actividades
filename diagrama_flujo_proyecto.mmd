@@ -1,0 +1,71 @@
+flowchart LR
+    A["Launcher"] --> B["MainActivity"]
+    B --> C["AppNavigation"]
+
+    subgraph NAV ["Navegacion Compose"]
+        C --> D["NavHost (start=home)"]
+        D --> H["HomeScreen"]
+        D --> I["CatalogScreen"]
+        D --> J["SymptomsScreen"]
+        D --> K["RemediesScreen"]
+        D --> L["FavoritesScreen"]
+        D --> M["PlantDetailScreen"]
+        D --> N["RemedyDetailScreen"]
+        D --> O["SymptomDetailScreen"]
+
+        C --> BN["BottomNavBar"]
+        BN -->|"Inicio"| H
+        BN -->|"Catalogo"| I
+        BN -->|"Sintomas"| J
+        BN -->|"Remedios"| K
+        BN -->|"Favoritas"| L
+        BN -->|"Actividad2 (Intent)"| ACT2
+    end
+
+    subgraph VM1 ["PlantasViewModel"]
+        V1["selectedPlant"]
+        V2["favorites"]
+        V3["selectedRemedy"]
+        V4["selectedSymptom"]
+    end
+
+    I -->|"selectPlant + navigate(detail)"| M
+    J -->|"selectSymptom + navigate(symptom_detail)"| O
+    K -->|"selectRemedy + navigate(remedy_detail)"| N
+    L -->|"selectPlant + navigate(detail)"| M
+    L -->|"removeFavorite"| V2
+    H -->|"navigate(detail)"| M
+    O -->|"selectPlant + navigate(detail)"| M
+    M -->|"toggleFavorite"| V2
+    M -->|"popBackStack"| D
+    N -->|"popBackStack"| D
+    O -->|"popBackStack"| D
+
+    I -.-> V1
+    J -.-> V4
+    K -.-> V3
+    L -.-> V2
+    M -.-> V1
+    N -.-> V3
+    O -.-> V4
+
+    subgraph ACT2_FLOW ["Actividad2 (XML + Fragment)"]
+        ACT2["Actividad2"] --> AC2VM["Actividad2ViewModel (uiState)"]
+        ACT2 --> FCV["FragmentContainerView"]
+        FCV --> FRAG["SoyUnFragmentoFragment"]
+        ACT2 --> NAV2["BottomNavigationView"]
+        NAV2 -->|"Ir a Actividad1"| B
+    end
+
+    subgraph FRAGMENT_FLOW ["Flujo en SoyUnFragmentoFragment"]
+        FRAG --> YTV["YouTubePlayerView"]
+        FRAG --> BTN["Boton Reproducir"]
+        FRAG --> FAB["FAB Play"]
+        FRAG -->|"collect uiState"| AC2VM
+        YTV -->|"onReady -> cueVideo(videoId)"| YP["YouTubePlayer"]
+        BTN -->|"reproducirVideo"| YP
+        FAB -->|"reproducirVideo"| YP
+        YP -->|"loadVideo(videoId)"| EMBED["Video embebido"]
+        YP -->|"error no embebible"| FALLBACK["Abrir YouTube externo"]
+        FRAG -->|"onDestroyView"| REL["removeObserver + release"]
+    end

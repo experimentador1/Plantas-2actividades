@@ -1,5 +1,6 @@
 package com.example.plantas.ui.components
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -44,7 +45,12 @@ fun BottomNavBar(navController: NavController) {
                 selected = item.route != null && current == item.route,
                 onClick  = {
                     if (item.isExternalActivity) {
-                        context.startActivity(Intent(context, Actividad2::class.java))
+                        val intent = Intent(context, Actividad2::class.java).apply {
+                            if (context !is Activity) {
+                                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            }
+                        }
+                        context.startActivity(intent)
                     } else {
                         item.route?.let { route ->
                             navController.navigate(route) {
